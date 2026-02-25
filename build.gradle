@@ -1,0 +1,82 @@
+plugins {
+	id 'java'
+	id 'pmd'
+	id 'checkstyle'
+	id 'jacoco'
+	id 'org.springframework.boot' version '4.0.2'
+	id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'com.stavre'
+version = '0.0.1-SNAPSHOT'
+description = 'Demo project for Spring Boot'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(25)
+	}
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-thymeleaf-test'
+	testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
+	testImplementation 'org.assertj:assertj-core:3.27.7'
+
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+
+test {
+	useJUnitPlatform()
+}
+
+checkstyle {
+	toolVersion = "13.2.0"
+	ignoreFailures = false
+	configDirectory = file("${project.rootDir}/checkstyle")
+	configFile = file("${project.rootDir}/checkstyle/checkstyle.xml")
+}
+
+pmd {
+	ignoreFailures = false
+	consoleOutput = true
+	toolVersion = "7.16.0"
+	rulesMinimumPriority = 5
+	ruleSets = ["category/java/errorprone.xml", "category/java/bestpractices.xml"]
+}
+
+
+test {
+	finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+	dependsOn test
+}
+
+jacocoTestCoverageVerification {
+	dependsOn jacocoTestReport
+	violationRules {
+		rule {
+			limit {
+				minimum = 0.7
+			}
+		}
+	}
+}
