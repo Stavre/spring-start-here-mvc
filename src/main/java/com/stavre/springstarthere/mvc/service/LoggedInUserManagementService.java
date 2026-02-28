@@ -2,12 +2,14 @@ package com.stavre.springstarthere.mvc.service;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 
-@Service
 @SessionScope
+@Setter
+@Getter
+@Component
 public class LoggedInUserManagementService {
-    @Getter @Setter
     private boolean loggedIn = false;
+    private String username;
 }

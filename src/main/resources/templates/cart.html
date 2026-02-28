@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Cart</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 40px;
+            background: #f4f6f9;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #333;
+        }
+
+        .cart-container {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease;
+        }
+
+        .cart-item:hover {
+            transform: translateY(-3px);
+        }
+
+        .product-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .product-info img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .product-details h3 {
+            margin: 0 0 8px 0;
+            color: #222;
+        }
+
+        .product-details p {
+            margin: 0;
+            color: #666;
+            font-weight: bold;
+        }
+
+        .remove-btn {
+            background-color: #e53e3e;
+            border: none;
+            padding: 10px 16px;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .remove-btn:hover {
+            background-color: #c53030;
+        }
+
+        .empty-cart {
+            text-align: center;
+            color: #777;
+            font-size: 18px;
+        }
+
+        .top-bar {
+            max-width: 900px;
+            margin: 0 auto 20px auto;
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        .back-btn {
+            background-color: #4a5568;
+            color: white;
+            padding: 8px 14px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background-color: #2d3748;
+        }
+
+        .bill-section {
+            margin: 40px auto 0 auto;   /* top | horizontal auto | bottom */
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .bill-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 16px;
+            color: #555;
+        }
+
+        .bill-row.total {
+            font-weight: bold;
+            font-size: 18px;
+            color: #222;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="top-bar">
+    <a th:href="@{/products/{username}(username=${username})}" class="back-btn">
+        ← Back to Products
+    </a>
+</div>
+
+<h1>Your Shopping Cart</h1>
+
+<div class="cart-container">
+    <!-- Empty Cart Message -->
+    <p class="empty-cart" th:if="${#lists.isEmpty(cartProducts)}">
+        Your cart is empty.
+    </p>
+
+    <!-- Cart Items -->
+    <div class="cart-item" th:each="item : ${cartProducts}">
+        <div class="product-info">
+            <img th:src="${item.imageUrl}" alt="Product Image">
+            <div class="product-details">
+                <h3 th:text="${item.name}">Product Name</h3>
+                <p>$<span th:text="${item.price}">0.00</span></p>
+            </div>
+        </div>
+
+        <form th:action="@{/cart/remove}" method="post">
+            <input type="hidden" name="productId" th:value="${item.id}">
+            <button type="submit" class="remove-btn">Remove</button>
+        </form>
+    </div>
+    <div class="bill-section" th:if="${!#lists.isEmpty(cartProducts)}">
+        <h2>Order Summary</h2>
+
+        <div class="bill-row">
+            <span>Subtotal</span>
+            <span>$<span th:text="${bill.subtotal}">0.00</span></span>
+        </div>
+
+        <div class="bill-row">
+            <span>Tax</span>
+            <span>$<span th:text="${bill.tax}">0.00</span></span>
+        </div>
+
+        <hr/>
+
+        <div class="bill-row total">
+            <span>Total</span>
+            <span>$<span th:text="${bill.total}">0.00</span></span>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
