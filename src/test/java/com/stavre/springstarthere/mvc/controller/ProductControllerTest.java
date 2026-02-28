@@ -35,13 +35,17 @@ class ProductControllerTest {
     @Test
     void productPageShouldReturnProductsViewWithModelAttributes() throws Exception {
 
-        Product firstProduct = new Product(UUID.randomUUID(), "Classic Leather Wallet",
-                "/images/23cf4678.png", new BigDecimal("12.59"));
-        Product secondProduct = new Product(UUID.randomUUID(), "Ceramic Coffee Mug",
-                "/images/3298b269.png", new BigDecimal("12.99"));
+        var first = new Product(UUID.fromString("08886810-5289-42d9-83b9-ad8feef5bc26"),
+                "Classic Leather Wallet",
+                "/images/23cf4678.png",
+                new BigDecimal("12.59"));
+        var second = new Product(UUID.fromString("fe23e950-66c9-4f21-8f79-d943c7c87f4b"),
+                "Ceramic Coffee Mug",
+                "/images/3298b269.png",
+                new BigDecimal("12.99"));
 
-        // Arrange
-        List<Product> mockProducts = List.of(firstProduct, secondProduct);
+                // Arrange
+        List<Product> mockProducts = List.of(first, second);
         given(productService.getAllProducts()).willReturn(mockProducts);
 
         // Act & Assert

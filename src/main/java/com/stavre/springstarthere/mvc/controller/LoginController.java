@@ -18,7 +18,7 @@ public class LoginController {
     private final LoggedInUserManagementService loggedInUserManagementService;
 
     @GetMapping("/login")
-    public String getLoginPage(@RequestParam(name = "message", required = false) String message,
+    public String getLoginPage(@RequestParam(required = false) String message,
                                Model model) {
         model.addAttribute("message", message);
         return "login.html";
@@ -28,7 +28,8 @@ public class LoginController {
     public String authenticateUser(User user) {
         if (loginService.isUserValid(user)) {
             loggedInUserManagementService.setLoggedIn(true);
-            return "redirect:products";
+            loggedInUserManagementService.setUsername(user.username());
+            return "redirect:products/" + user.username();
         }
 
         loggedInUserManagementService.setLoggedIn(false);

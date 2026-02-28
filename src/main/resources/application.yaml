@@ -1,4 +1,7 @@
 spring:
   application:
     name: Spring Start Here MVC
+vat:
+  percentage:
+    0.21
 
